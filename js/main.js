@@ -1,4 +1,4 @@
-const isInvalidFloat = (number) => number < 0 || !(typeof number === 'number') || Number.isNaN(number);
+const isInvalidFloat = (number) => number < 0;
 const isInvalidInteger = (number) => number < 0 || !Number.isInteger(number);
 
 const getRandomInteger = (min, max) => {

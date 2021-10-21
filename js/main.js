@@ -1,4 +1,3 @@
-import {generateAdvert, firstAdvertItem, advertListElement, advertListFragment} from './card.js';
+import {generateAdvert, firstAdvertItem} from './card.js';
 
 generateAdvert(firstAdvertItem);
-advertListElement.appendChild(advertListFragment);

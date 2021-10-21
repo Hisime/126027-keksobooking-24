@@ -40,25 +40,12 @@ const createAdvert = (index) => {
 Array.from({ length: ADVERT_COUNT }, createAdvert);
 const firstAdvertItem = createAdvert(1);
 
-const getHouseType = (type) => {
-  switch (type) {
-    case 'flat':
-      type = 'Квартира ';
-      break;
-    case 'bungalow':
-      type = 'Бунгало';
-      break;
-    case 'house':
-      type = 'Дом';
-      break;
-    case 'palace':
-      type = 'Дворец';
-      break;
-    case 'hotel':
-      type = 'Отель';
-      break;
-  }
-  return type;
+const getHouseType = {
+  flat: 'Квартира ',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель',
 };
 
 const advertTemplate = document.querySelector('#card').content.querySelector('.popup');
@@ -66,8 +53,8 @@ const advertListElement = document.querySelector('#map-canvas');
 const advertListFragment = document.createDocumentFragment();
 const advertImgElement = document.querySelector('#card').content.querySelector('.popup__photo');
 
-const newImgs = [];
 const generateImgs = (array) => {
+  const newImgs = [];
   array.forEach((item) => {
     const imgTemplate = advertImgElement.cloneNode(true);
     imgTemplate.src = item;
@@ -76,7 +63,6 @@ const generateImgs = (array) => {
   return newImgs;
 };
 
-const photosArray = generateImgs(firstAdvertItem.offer.photos);
 const generateAdvert = (advert) => {
   const advertCard = advertTemplate.cloneNode(true);
   advertListElement.appendChild(advertCard);
@@ -86,7 +72,7 @@ const generateAdvert = (advert) => {
   const addressElement = advertCard.querySelector('.popup__text--address');
   const price = advert.offer.price;
   const priceElement = advertCard.querySelector('.popup__text--price');
-  const type = getHouseType(advert.offer.type);
+  const type = getHouseType[advert.offer.type];
   const typeElement = advertCard.querySelector('.popup__type');
   const rooms = advert.offer.rooms;
   const guests = advert.offer.guests;
@@ -102,6 +88,7 @@ const generateAdvert = (advert) => {
   const avatarElement = advertCard.querySelector('.popup__avatar');
   const photosElement = advertCard.querySelector('.popup__photos');
   const photoElement = photosElement.querySelector('.popup__photo');
+  const photosArray = generateImgs(advert.offer.photos);
   if (title) {
     titleElement.textContent = title;
   }
@@ -121,7 +108,7 @@ const generateAdvert = (advert) => {
     priceElement.remove();
   }
   if (type) {
-    typeElement.content = type;
+    typeElement.textContent = type;
   }
   else {
     typeElement.remove();
@@ -164,6 +151,7 @@ const generateAdvert = (advert) => {
     avatarElement.remove();
   }
   advertListFragment.appendChild(advertCard);
+  advertListElement.appendChild(advertListFragment);
 };
 
-export {generateAdvert, firstAdvertItem, advertListElement, advertListFragment};
+export {generateAdvert, firstAdvertItem};

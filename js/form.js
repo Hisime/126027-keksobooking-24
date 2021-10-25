@@ -18,12 +18,12 @@ const disablePage = () => {
 
 const activePage = () => {
   filterElements.forEach((element) => {
-    element.removeAttribute('disabled', '');
+    element.removeAttribute('disabled');
   });
   form.classList.remove(formDisabled);
   filter.classList.remove(filterDisabled);
   formElements.forEach((element) => {
-    element.removeAttribute('disabled', '');
+    element.removeAttribute('disabled');
   });
 };
 

@@ -27,4 +27,39 @@ const activePage = () => {
   });
 };
 
+const roomSelect = form.querySelector('#room_number');
+const capacitySelect = form.querySelector('#capacity');
+const capacityOptions = capacitySelect.querySelectorAll('option');
+const onRoomSelectChange = () => {
+  const updateOptions = (optionList) => {
+    capacityOptions.forEach((option) => {
+      if (optionList.includes(option.value)) {
+        option.removeAttribute('disabled');
+      }
+      else {
+        option.setAttribute('disabled', '');
+        if (capacitySelect.value === option.value) {
+          capacitySelect.value = '';
+        }
+      }
+    });
+  };
+
+  if (roomSelect.value === '1') {
+    updateOptions(['1']);
+  }
+  if (roomSelect.value === '2') {
+    updateOptions(['1', '2']);
+  }
+  if (roomSelect.value === '3') {
+    updateOptions(['1', '2', '3']);
+  }
+  if (roomSelect.value === '100') {
+    updateOptions(['0']);
+  }
+};
+
+onRoomSelectChange();
+roomSelect.addEventListener('change', onRoomSelectChange);
+
 export {disablePage, activePage};

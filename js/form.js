@@ -1,65 +1,66 @@
-const form = document.querySelector('.ad-form');
-const formDisabled = 'ad-form--disabled';
-const formElements = form.querySelectorAll('fieldset');
-const filter = document.querySelector('.map__filters');
-const filterDisabled = 'map__filters--disabled';
-const filterElements = filter.querySelectorAll('[class^=\'map__\']');
+const formNode = document.querySelector('.ad-form');
+const formDisabledClass = 'ad-form--disabled';
+const formListNode = formNode.querySelectorAll('fieldset');
+const filterNode = document.querySelector('.map__filters');
+const filterDisabledClass = 'map__filters--disabled';
+const filterListNode = filterNode.querySelectorAll('[class^=\'map__\']');
 
 const disablePage = () => {
-  filterElements.forEach((element) => {
-    element.setAttribute('disabled', '');
+  filterListNode.forEach((node) => {
+    node.setAttribute('disabled', '');
   });
-  form.classList.add(formDisabled);
-  filter.classList.add(filterDisabled);
-  formElements.forEach((element) => {
-    element.setAttribute('disabled', '');
+  formNode.classList.add(formDisabledClass);
+  filterNode.classList.add(filterDisabledClass);
+  formListNode.forEach((node) => {
+    node.setAttribute('disabled', '');
   });
 };
 
 const activePage = () => {
-  filterElements.forEach((element) => {
-    element.removeAttribute('disabled');
+  filterListNode.forEach((node) => {
+    node.removeAttribute('disabled');
   });
-  form.classList.remove(formDisabled);
-  filter.classList.remove(filterDisabled);
-  formElements.forEach((element) => {
-    element.removeAttribute('disabled');
+  formNode.classList.remove(formDisabledClass);
+  filterNode.classList.remove(filterDisabledClass);
+  formListNode.forEach((node) => {
+    node.removeAttribute('disabled');
   });
 };
 
-const roomSelect = form.querySelector('#room_number');
-const capacitySelect = form.querySelector('#capacity');
-const capacityOptions = capacitySelect.querySelectorAll('option');
-const onRoomSelectChange = () => {
+const roomSelectNode = formNode.querySelector('#room_number');
+const capacitySelectNode = formNode.querySelector('#capacity');
+const capacityOptionListNode = capacitySelectNode.querySelectorAll('option');
+const onroomSelectNodeChange = () => {
   const updateOptions = (optionList) => {
-    capacityOptions.forEach((option) => {
+    capacityOptionListNode.forEach((option) => {
       if (optionList.includes(option.value)) {
         option.removeAttribute('disabled');
       }
       else {
         option.setAttribute('disabled', '');
-        if (capacitySelect.value === option.value) {
-          capacitySelect.value = '';
+        if (capacitySelectNode.value === option.value) {
+          capacitySelectNode.value = '';
         }
       }
     });
   };
-
-  if (roomSelect.value === '1') {
-    updateOptions(['1']);
-  }
-  if (roomSelect.value === '2') {
-    updateOptions(['1', '2']);
-  }
-  if (roomSelect.value === '3') {
-    updateOptions(['1', '2', '3']);
-  }
-  if (roomSelect.value === '100') {
-    updateOptions(['0']);
+  switch(roomSelectNode.value) {
+    case '1':
+      updateOptions(['1']);
+      break;
+    case '2':
+      updateOptions(['1', '2']);
+      break;
+    case '3':
+      updateOptions(['1', '2', '3']);
+      break;
+    case '100':
+      updateOptions(['0']);
+      break;
   }
 };
 
-onRoomSelectChange();
-roomSelect.addEventListener('change', onRoomSelectChange);
+onroomSelectNodeChange();
+roomSelectNode.addEventListener('change', onroomSelectNodeChange);
 
 export {disablePage, activePage};

@@ -30,7 +30,7 @@ const activePage = () => {
 const roomSelectNode = formNode.querySelector('#room_number');
 const capacitySelectNode = formNode.querySelector('#capacity');
 const capacityOptionListNode = capacitySelectNode.querySelectorAll('option');
-const onroomSelectNodeChange = () => {
+const onRoomSelectNodeChange = () => {
   const updateOptions = (optionList) => {
     capacityOptionListNode.forEach((option) => {
       if (optionList.includes(option.value)) {
@@ -60,7 +60,66 @@ const onroomSelectNodeChange = () => {
   }
 };
 
-onroomSelectNodeChange();
-roomSelectNode.addEventListener('change', onroomSelectNodeChange);
+const typeHouseSelectNode = formNode.querySelector('#type');
+const pricePerNightNode = formNode.querySelector('#price');
+const checkInSelectNode = formNode.querySelector('#timein');
+const checkOutSelectNode = formNode.querySelector('#timeout');
+
+const validatePrice = () => {
+  if (Number(pricePerNightNode.value) < pricePerNightNode.min) {
+    pricePerNightNode.setCustomValidity(`Минимальная цена ${pricePerNightNode.min}`);
+  }
+  else {
+    pricePerNightNode.setCustomValidity('');
+  }
+  pricePerNightNode.reportValidity();
+};
+
+pricePerNightNode.addEventListener('input', () => {
+  validatePrice();
+});
+
+const onHouseTypeSelectNodeChange = () => {
+  const setMinPrice = (minPrice) => {
+    pricePerNightNode.min = minPrice;
+    pricePerNightNode.placeholder = minPrice;
+  };
+  let minValidatorValue;
+  switch(typeHouseSelectNode.value) {
+    case 'bungalow':
+      minValidatorValue = 0;
+      break;
+    case 'flat':
+      minValidatorValue = 1000;
+      break;
+    case 'hotel':
+      minValidatorValue = 3000;
+      break;
+    case 'house':
+      minValidatorValue = 5000;
+      break;
+    case 'palace':
+      minValidatorValue = 10000;
+      break;
+  }
+
+  setMinPrice(minValidatorValue);
+  validatePrice();
+};
+
+const onCheckInNodeChange = () => {
+  checkOutSelectNode.value = checkInSelectNode.value;
+};
+
+const onCheckOutNodeChange = () => {
+  checkInSelectNode.value = checkOutSelectNode.value;
+};
+
+onRoomSelectNodeChange();
+roomSelectNode.addEventListener('change', onRoomSelectNodeChange);
+typeHouseSelectNode.addEventListener('change', onHouseTypeSelectNodeChange);
+checkInSelectNode.addEventListener('change', onCheckInNodeChange);
+checkOutSelectNode.addEventListener('change', onCheckOutNodeChange);
+
 
 export {disablePage, activePage};

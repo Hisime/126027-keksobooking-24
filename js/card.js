@@ -37,8 +37,7 @@ const createAdvert = (index) => {
   };
 };
 
-Array.from({ length: ADVERT_COUNT }, createAdvert);
-const firstAdvertItem = createAdvert(1);
+const advertList = Array.from({ length: ADVERT_COUNT }, createAdvert);
 
 const getHouseType = {
   flat: 'Квартира ',
@@ -49,8 +48,6 @@ const getHouseType = {
 };
 
 const advertTemplate = document.querySelector('#card').content.querySelector('.popup');
-const advertListElement = document.querySelector('#map-canvas');
-const advertListFragment = document.createDocumentFragment();
 const advertImgElement = document.querySelector('#card').content.querySelector('.popup__photo');
 
 const generateImgs = (array) => {
@@ -65,7 +62,6 @@ const generateImgs = (array) => {
 
 const generateAdvert = (advert) => {
   const advertCard = advertTemplate.cloneNode(true);
-  advertListElement.appendChild(advertCard);
   const title = advert.offer.title;
   const titleElement = advertCard.querySelector('.popup__title');
   const address = advert.offer.address;
@@ -150,8 +146,8 @@ const generateAdvert = (advert) => {
   else {
     avatarElement.remove();
   }
-  advertListFragment.appendChild(advertCard);
-  advertListElement.appendChild(advertListFragment);
+  return advertCard;
 };
 
-export {generateAdvert, firstAdvertItem};
+
+export {generateAdvert, advertList};

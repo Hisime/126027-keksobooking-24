@@ -1,17 +1,19 @@
 import {disablePage, activePage} from './form.js';
-import {generateAdvert, advertList} from './card.js';
+import {generateAdvert} from './card.js';
 
 disablePage();
+
+const MAP_CENTER = {
+  lat: 35.68390,
+  lng: 139.75323,
+};
 
 const addressNode = document.querySelector('#address');
 const map = L.map('map-canvas')
   .on('load', () => {
     activePage();
   })
-  .setView({
-    lat: 35.4200,
-    lng: 139.2530,
-  }, 10);
+  .setView(MAP_CENTER, 12);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -28,10 +30,7 @@ const mainMarkerIcon = L.icon({
 
 
 const mainMarker = L.marker(
-  {
-    lat: 35.4200,
-    lng: 139.2530,
-  },
+  MAP_CENTER,
   {
     draggable: true,
     icon: mainMarkerIcon,
@@ -40,7 +39,7 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map);
 
-addressNode.value = '35.4200, 139.2530';
+addressNode.value = `${MAP_CENTER.lat}, ${MAP_CENTER.lng}`;
 
 mainMarker.on('drag', (evt) => {
   const coordinates = evt.target.getLatLng();
@@ -49,20 +48,31 @@ mainMarker.on('drag', (evt) => {
   addressNode.value = `${coodinateLat}, ${coordinateLng}`;
 });
 
-advertList.forEach((advert) => {
-  const icon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+const ADVERT_COUNT = 10;
+const addPinsToMap = (advertList) => {
+  advertList.slice(0, ADVERT_COUNT).forEach((advert) => {
+    const icon = L.icon({
+      iconUrl: 'img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
+    const { location: {lat,lng}} = advert;
+    const marker = L.marker({
+      lat,
+      lng,
+    },
+    {
+      icon,
+    });
+    marker.addTo(map).bindPopup(generateAdvert(advert));
   });
-  const { location: {lat,lng}} = advert;
-  const marker = L.marker({
-    lat,
-    lng,
-  },
-  {
-    icon,
-  });
-  marker.addTo(map).bindPopup(generateAdvert(advert));
-});
+};
 
+const resetMap = () => {
+  map.closePopup();
+  map.setView(MAP_CENTER, 12);
+  mainMarker.setLatLng(MAP_CENTER);
+};
+
+
+export { addPinsToMap, resetMap, MAP_CENTER};

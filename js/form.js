@@ -1,3 +1,5 @@
+import { MAP_CENTER, resetMap } from './map.js';
+
 const formNode = document.querySelector('.ad-form');
 const formDisabledClass = 'ad-form--disabled';
 const formListNode = formNode.querySelectorAll('fieldset');
@@ -121,5 +123,37 @@ typeHouseSelectNode.addEventListener('change', onHouseTypeSelectNodeChange);
 checkInSelectNode.addEventListener('change', onCheckInNodeChange);
 checkOutSelectNode.addEventListener('change', onCheckOutNodeChange);
 
+const showMessagePopover = (templateId) => {
+  const bodyNode = document.querySelector('body');
+  const messageTemplateNode = document.querySelector(`#${templateId}`).content;
+  const messageNode = messageTemplateNode.firstElementChild.cloneNode(true);
+  const onEscapeKeyPress = (evt) => {
+    if (evt.key === 'Escape') {
+      messageNode.remove();
+      window.removeEventListener('keydown', onEscapeKeyPress);
+    }
+  };
+  const onMessageClick = () => {
+    messageNode.remove();
+    window.removeEventListener('keydown', onEscapeKeyPress);
+  };
+  messageNode.addEventListener('click', onMessageClick);
+  window.addEventListener('keydown', onEscapeKeyPress);
+  bodyNode.appendChild(messageNode);
+};
 
-export {disablePage, activePage};
+
+const addressNode = formNode.querySelector('#address');
+const resetForm = () => {
+  formNode.reset();
+  resetMap();
+  addressNode.value = `${MAP_CENTER.lat}, ${MAP_CENTER.lng}`;
+};
+
+const resetButtonNode = formNode.querySelector('.ad-form__reset');
+resetButtonNode.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
+});
+
+export {disablePage, activePage, formNode, showMessagePopover, resetForm};

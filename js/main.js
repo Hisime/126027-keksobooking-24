@@ -1,4 +1,4 @@
-import {addPinsToMap} from './map.js';
+import {addPinsToMap, setFilterForm} from './map.js';
 import { getData } from './api.js';
 import { setUserFormSubmit } from './api.js';
 import { formNode, resetForm, showMessagePopover} from './form.js';
@@ -13,5 +13,8 @@ const onFormSubmitError = () => {
   showMessagePopover('error');
 };
 
-getData(addPinsToMap, showAlert);
+getData((offerList) => {
+  addPinsToMap(offerList);
+  setFilterForm(offerList);
+}, showAlert);
 setUserFormSubmit(formNode, onFormSubmitSuccess, onFormSubmitError);

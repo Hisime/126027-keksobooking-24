@@ -1,7 +1,8 @@
 
+const URL = 'https://24.javascript.pages.academy/keksobooking';
 
 const getData = (onSuccess, onError) => {
-  fetch('https://24.javascript.pages.academy/keksobooking/data')
+  fetch(`${URL}/data`)
     .then((response) => response.json())
     .then((offers) => {
       onSuccess(offers);
@@ -14,7 +15,7 @@ const setUserFormSubmit = (formNode, onSuccess, onError) => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
     fetch(
-      'https://24.javascript.pages.academy/keksobooking',
+      URL,
       {
         method: 'POST',
         body: formData,

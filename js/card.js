@@ -9,11 +9,8 @@ const getHouseType = {
 const advertTemplate = document.querySelector('#card').content.querySelector('.popup');
 const advertImgElement = document.querySelector('#card').content.querySelector('.popup__photo');
 
-const generateImgs = (array) => {
+const generateImgs = (array = []) => {
   const newImgs = [];
-  if (!array) {
-    array = [];
-  }
   array.forEach((item) => {
     const imgTemplate = advertImgElement.cloneNode(true);
     imgTemplate.src = item;
@@ -39,7 +36,8 @@ const generateAdvert = (advert) => {
   const checkout = advert.offer.checkout;
   const timeElement = advertCard.querySelector('.popup__text--time');
   const features = advert.offer.features;
-  const featuresElement = advertCard.querySelector('.popup__features');
+  const featuresNode = advertCard.querySelector('.popup__features');
+  const featureListNode = featuresNode.querySelectorAll('.popup__feature');
   const description = advert.offer.description;
   const descriptionElement = advertCard.querySelector('.popup__description');
   const avatar = advert.author.avatar;
@@ -83,12 +81,21 @@ const generateAdvert = (advert) => {
   else {
     timeElement.remove();
   }
+
   if (features) {
-    featuresElement.textContent = features;
+    featureListNode.forEach((featureListItem) => {
+      const isNecessary = features.some(
+        (featureName) => featureListItem.classList.contains(`popup__feature--${featureName}`),
+      );
+      if (!isNecessary) {
+        featureListItem.remove();
+      }
+    });
   }
   else {
-    featuresElement.remove();
+    featuresNode.remove();
   }
+
   if (description) {
     descriptionElement.textContent = description;
   }

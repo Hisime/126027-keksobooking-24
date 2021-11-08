@@ -1,4 +1,4 @@
-import {disablePage, activePage, formNode} from './form.js';
+import {disablePage, activePage} from './form.js';
 import {generateAdvert} from './card.js';
 import { debounce } from './utils/debounce.js';
 

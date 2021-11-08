@@ -124,7 +124,7 @@ checkInSelectNode.addEventListener('change', onCheckInNodeChange);
 checkOutSelectNode.addEventListener('change', onCheckOutNodeChange);
 
 const showMessagePopover = (templateId) => {
-  const bodyNode = document.querySelector('body');
+  const bodyNode = document.body;
   const messageTemplateNode = document.querySelector(`#${templateId}`).content;
   const messageNode = messageTemplateNode.firstElementChild.cloneNode(true);
   const onEscapeKeyPress = (evt) => {

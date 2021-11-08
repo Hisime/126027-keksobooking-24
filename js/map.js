@@ -1,5 +1,6 @@
-import {disablePage, activePage} from './form.js';
+import {disablePage, activePage, formNode} from './form.js';
 import {generateAdvert} from './card.js';
+import { debounce } from './utils/debounce.js';
 
 disablePage();
 
@@ -7,6 +8,8 @@ const MAP_CENTER = {
   lat: 35.68390,
   lng: 139.75323,
 };
+
+const markers = [];
 
 const addressNode = document.querySelector('#address');
 const map = L.map('map-canvas')
@@ -49,23 +52,80 @@ mainMarker.on('drag', (evt) => {
 });
 
 const ADVERT_COUNT = 10;
+const filterFormNode = document.querySelector('.map__filters');
+const houseSelectNode = filterFormNode.querySelector('#housing-type');
+const priceSelectNode = filterFormNode.querySelector('#housing-price');
+const roomSelectNode = filterFormNode.querySelector('#housing-rooms');
+const guestSelectNode = filterFormNode.querySelector('#housing-guests');
+
+const filterByHouse = (advert) => {
+  if (houseSelectNode.value === 'any') {
+    return true;
+  }
+  return houseSelectNode.value === advert.offer.type;
+};
+
+const filterByPrice = (advert) => {
+  if (priceSelectNode.value === 'any') {
+    return true;
+  }
+  if (priceSelectNode.value === 'low' && advert.offer.price >= 0 && advert.offer.price < 10000) {
+    return true;
+  }
+  if (priceSelectNode.value === 'middle' && advert.offer.price >= 10000 && advert.offer.price <= 50000) {
+    return true;
+  }
+  return priceSelectNode.value === 'high' && advert.offer.price > 50000;
+};
+
+const filterByRooms = (advert) => {
+  if (roomSelectNode.value === 'any') {
+    return true;
+  }
+  return Number(roomSelectNode.value) === advert.offer.rooms;
+};
+
+const filterByGuests = (advert) => {
+  if (guestSelectNode.value === 'any') {
+    return true;
+  }
+  return Number(guestSelectNode.value) === advert.offer.guests;
+};
+const filterByFeatures = (advert) => {
+  const features = advert.offer.features || [];
+  const featuresListNode = filterFormNode.querySelectorAll('.map__checkbox:checked');
+  const featuresSelected = Array.from(featuresListNode).map((input) => input.value);
+  return !featuresSelected.some((element) => !features.includes(element));
+};
+
 const addPinsToMap = (advertList) => {
-  advertList.slice(0, ADVERT_COUNT).forEach((advert) => {
-    const icon = L.icon({
-      iconUrl: 'img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-    });
-    const { location: {lat,lng}} = advert;
-    const marker = L.marker({
-      lat,
-      lng,
-    },
-    {
-      icon,
-    });
-    marker.addTo(map).bindPopup(generateAdvert(advert));
+  markers.forEach((marker) => {
+    marker.remove();
   });
+  advertList
+    .slice()
+    .filter(filterByHouse)
+    .filter(filterByPrice)
+    .filter(filterByRooms)
+    .filter(filterByGuests)
+    .filter(filterByFeatures)
+    .slice(0, ADVERT_COUNT).forEach((advert) => {
+      const icon = L.icon({
+        iconUrl: 'img/pin.svg',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+      });
+      const { location: {lat,lng}} = advert;
+      const marker = L.marker({
+        lat,
+        lng,
+      },
+      {
+        icon,
+      });
+      markers.push(marker);
+      marker.addTo(map).bindPopup(generateAdvert(advert));
+    });
 };
 
 const resetMap = () => {
@@ -74,5 +134,8 @@ const resetMap = () => {
   mainMarker.setLatLng(MAP_CENTER);
 };
 
+const setFilterForm = (advertList) => {
+  filterFormNode.addEventListener('change', debounce(() => addPinsToMap(advertList)));
+};
 
-export { addPinsToMap, resetMap, MAP_CENTER};
+export { addPinsToMap, resetMap, setFilterForm, MAP_CENTER};

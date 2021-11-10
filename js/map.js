@@ -2,16 +2,20 @@ import {disablePage, activePage} from './form.js';
 import {generateAdvert} from './card.js';
 import { debounce } from './utils/debounce.js';
 
-disablePage();
-
 const MAP_CENTER = {
   lat: 35.68390,
   lng: 139.75323,
 };
 
-const markers = [];
+const LOW_PRICE = 0;
+const MIDDLE_PRICE = 10000;
+const HIGH_PRICE = 50000;
 
+disablePage();
+
+const markers = [];
 const addressNode = document.querySelector('#address');
+
 const map = L.map('map-canvas')
   .on('load', () => {
     activePage();
@@ -69,13 +73,13 @@ const filterByPrice = (advert) => {
   if (priceSelectNode.value === 'any') {
     return true;
   }
-  if (priceSelectNode.value === 'low' && advert.offer.price >= 0 && advert.offer.price < 10000) {
+  if (priceSelectNode.value === 'low' && advert.offer.price >= LOW_PRICE && advert.offer.price < MIDDLE_PRICE) {
     return true;
   }
-  if (priceSelectNode.value === 'middle' && advert.offer.price >= 10000 && advert.offer.price <= 50000) {
+  if (priceSelectNode.value === 'middle' && advert.offer.price >= MIDDLE_PRICE && advert.offer.price <= HIGH_PRICE) {
     return true;
   }
-  return priceSelectNode.value === 'high' && advert.offer.price > 50000;
+  return priceSelectNode.value === 'high' && advert.offer.price > HIGH_PRICE;
 };
 
 const filterByRooms = (advert) => {
@@ -95,7 +99,7 @@ const filterByFeatures = (advert) => {
   const features = advert.offer.features || [];
   const featuresListNode = filterFormNode.querySelectorAll('.map__checkbox:checked');
   const featuresSelected = Array.from(featuresListNode).map((input) => input.value);
-  return !featuresSelected.some((element) => !features.includes(element));
+  return featuresSelected.every((element) => features.includes(element));
 };
 
 const addPinsToMap = (advertList) => {

@@ -22,64 +22,64 @@ const generateImgs = (array = []) => {
 const generateAdvert = (advert) => {
   const advertCard = advertTemplate.cloneNode(true);
   const title = advert.offer.title;
-  const titleElement = advertCard.querySelector('.popup__title');
+  const titleNode = advertCard.querySelector('.popup__title');
   const address = advert.offer.address;
-  const addressElement = advertCard.querySelector('.popup__text--address');
+  const addressNode = advertCard.querySelector('.popup__text--address');
   const price = advert.offer.price;
-  const priceElement = advertCard.querySelector('.popup__text--price');
+  const priceNode = advertCard.querySelector('.popup__text--price');
   const type = getHouseType[advert.offer.type];
-  const typeElement = advertCard.querySelector('.popup__type');
+  const typeNode = advertCard.querySelector('.popup__type');
   const rooms = advert.offer.rooms;
   const guests = advert.offer.guests;
-  const capacityElement = advertCard.querySelector('.popup__text--capacity');
+  const capacityNode = advertCard.querySelector('.popup__text--capacity');
   const checkin = advert.offer.checkin;
   const checkout = advert.offer.checkout;
-  const timeElement = advertCard.querySelector('.popup__text--time');
+  const timeNode = advertCard.querySelector('.popup__text--time');
   const features = advert.offer.features;
   const featuresNode = advertCard.querySelector('.popup__features');
   const featureListNode = featuresNode.querySelectorAll('.popup__feature');
   const description = advert.offer.description;
-  const descriptionElement = advertCard.querySelector('.popup__description');
+  const descriptionNode = advertCard.querySelector('.popup__description');
   const avatar = advert.author.avatar;
-  const avatarElement = advertCard.querySelector('.popup__avatar');
-  const photosElement = advertCard.querySelector('.popup__photos');
-  const photoElement = photosElement.querySelector('.popup__photo');
+  const avatarNode = advertCard.querySelector('.popup__avatar');
+  const photosNode = advertCard.querySelector('.popup__photos');
+  const photoElement = photosNode.querySelector('.popup__photo');
   const photosArray = generateImgs(advert.offer.photos);
   if (title) {
-    titleElement.textContent = title;
+    titleNode.textContent = title;
   }
   else {
-    titleElement.remove();
+    titleNode.remove();
   }
   if (address) {
-    addressElement.textContent = address;
+    addressNode.textContent = address;
   }
   else {
-    addressElement.remove();
+    addressNode.remove();
   }
   if (price) {
-    priceElement.textContent = `${price} ₽/ночь`;
+    priceNode.textContent = `${price} ₽/ночь`;
   }
   else {
-    priceElement.remove();
+    priceNode.remove();
   }
   if (type) {
-    typeElement.textContent = type;
+    typeNode.textContent = type;
   }
   else {
-    typeElement.remove();
+    typeNode.remove();
   }
   if (rooms && guests) {
-    capacityElement.textContent = `${rooms} комнаты для ${guests} гостей`;
+    capacityNode.textContent = `${rooms} комнаты для ${guests} гостей`;
   }
   else {
-    capacityElement.remove();
+    capacityNode.remove();
   }
   if (checkin && checkout) {
-    timeElement.textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
+    timeNode.textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
   }
   else {
-    timeElement.remove();
+    timeNode.remove();
   }
 
   if (features) {
@@ -97,23 +97,23 @@ const generateAdvert = (advert) => {
   }
 
   if (description) {
-    descriptionElement.textContent = description;
+    descriptionNode.textContent = description;
   }
   else {
-    descriptionElement.remove();
+    descriptionNode.remove();
   }
   photoElement.remove();
   if (photosArray.length) {
-    photosElement.append(...photosArray);
+    photosNode.append(...photosArray);
   }
   else {
-    photosElement.remove();
+    photosNode.remove();
   }
   if (avatar) {
-    avatarElement.src = avatar;
+    avatarNode.src = avatar;
   }
   else {
-    avatarElement.remove();
+    avatarNode.remove();
   }
   return advertCard;
 };

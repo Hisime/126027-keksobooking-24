@@ -1,4 +1,4 @@
-const getHouseType = {
+const HOUSE_TYPES = {
   flat: 'Квартира ',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -27,7 +27,7 @@ const generateAdvert = (advert) => {
   const addressNode = advertCard.querySelector('.popup__text--address');
   const price = advert.offer.price;
   const priceNode = advertCard.querySelector('.popup__text--price');
-  const type = getHouseType[advert.offer.type];
+  const type = HOUSE_TYPES[advert.offer.type];
   const typeNode = advertCard.querySelector('.popup__type');
   const rooms = advert.offer.rooms;
   const guests = advert.offer.guests;

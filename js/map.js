@@ -1,6 +1,6 @@
 import {disablePage, activePage} from './form.js';
 import {generateAdvert} from './card.js';
-import { debounce } from './utils/debounce.js';
+import {debounce} from './utils.js';
 
 const MAP_CENTER = {
   lat: 35.68390,

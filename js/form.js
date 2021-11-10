@@ -1,5 +1,14 @@
 import { MAP_CENTER, resetMap } from './map.js';
 
+const MinPrices = {
+  BUNGALOW: 0,
+  FLAT: 1000,
+  HOTEL: 3000,
+  HOUSE: 5000,
+  PALACE: 10000,
+};
+
+
 const formNode = document.querySelector('.ad-form');
 const formDisabledClass = 'ad-form--disabled';
 const formListNode = formNode.querySelectorAll('fieldset');
@@ -89,19 +98,19 @@ const onHouseTypeSelectNodeChange = () => {
   let minValidatorValue;
   switch(typeHouseSelectNode.value) {
     case 'bungalow':
-      minValidatorValue = 0;
+      minValidatorValue = MinPrices.BUNGALOW;
       break;
     case 'flat':
-      minValidatorValue = 1000;
+      minValidatorValue = MinPrices.FLAT;
       break;
     case 'hotel':
-      minValidatorValue = 3000;
+      minValidatorValue = MinPrices.HOTEL;
       break;
     case 'house':
-      minValidatorValue = 5000;
+      minValidatorValue = MinPrices.HOUSE;
       break;
     case 'palace':
-      minValidatorValue = 10000;
+      minValidatorValue = MinPrices.PALACE;
       break;
   }
 

@@ -1,4 +1,5 @@
 import { MAP_CENTER, resetMap } from './map.js';
+import { clearImages } from './photos.js';
 
 const MinPrices = {
   BUNGALOW: 0,
@@ -6,6 +7,13 @@ const MinPrices = {
   HOTEL: 3000,
   HOUSE: 5000,
   PALACE: 10000,
+};
+
+const OptionsMap = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0'],
 };
 
 
@@ -18,57 +26,47 @@ const filterListNode = filterNode.querySelectorAll('[class^=\'map__\']');
 
 const disablePage = () => {
   filterListNode.forEach((node) => {
-    node.setAttribute('disabled', '');
+    node.disabled = true;
   });
   formNode.classList.add(formDisabledClass);
   filterNode.classList.add(filterDisabledClass);
   formListNode.forEach((node) => {
-    node.setAttribute('disabled', '');
+    node.disabled = true;
   });
 };
 
-const activePage = () => {
-  filterListNode.forEach((node) => {
-    node.removeAttribute('disabled');
-  });
+const activateMainForm = () => {
   formNode.classList.remove(formDisabledClass);
-  filterNode.classList.remove(filterDisabledClass);
   formListNode.forEach((node) => {
-    node.removeAttribute('disabled');
+    node.disabled = false;
   });
+};
+
+const activateFilterForm = () => {
+  filterListNode.forEach((node) => {
+    node.disabled = false;
+  });
+  filterNode.classList.remove(filterDisabledClass);
 };
 
 const roomSelectNode = formNode.querySelector('#room_number');
 const capacitySelectNode = formNode.querySelector('#capacity');
 const capacityOptionListNode = capacitySelectNode.querySelectorAll('option');
 const onRoomSelectNodeChange = () => {
-  const updateOptions = (optionList) => {
+  const updateOptions = (optionList = []) => {
     capacityOptionListNode.forEach((option) => {
       if (optionList.includes(option.value)) {
-        option.removeAttribute('disabled');
+        option.disabled = false;
       }
       else {
-        option.setAttribute('disabled', '');
+        option.disabled = true;
         if (capacitySelectNode.value === option.value) {
           capacitySelectNode.value = '';
         }
       }
     });
   };
-  switch(roomSelectNode.value) {
-    case '1':
-      updateOptions(['1']);
-      break;
-    case '2':
-      updateOptions(['1', '2']);
-      break;
-    case '3':
-      updateOptions(['1', '2', '3']);
-      break;
-    case '100':
-      updateOptions(['0']);
-      break;
-  }
+  updateOptions(OptionsMap[roomSelectNode.value]);
 };
 
 const typeHouseSelectNode = formNode.querySelector('#type');
@@ -90,32 +88,17 @@ pricePerNightNode.addEventListener('input', () => {
   validatePrice();
 });
 
-const onHouseTypeSelectNodeChange = () => {
+const onHouseTypeSelectNodeChange = (noValidate) => {
   const setMinPrice = (minPrice) => {
     pricePerNightNode.min = minPrice;
     pricePerNightNode.placeholder = minPrice;
   };
-  let minValidatorValue;
-  switch(typeHouseSelectNode.value) {
-    case 'bungalow':
-      minValidatorValue = MinPrices.BUNGALOW;
-      break;
-    case 'flat':
-      minValidatorValue = MinPrices.FLAT;
-      break;
-    case 'hotel':
-      minValidatorValue = MinPrices.HOTEL;
-      break;
-    case 'house':
-      minValidatorValue = MinPrices.HOUSE;
-      break;
-    case 'palace':
-      minValidatorValue = MinPrices.PALACE;
-      break;
-  }
+  const minValidatorValue = MinPrices[typeHouseSelectNode.value.toUpperCase()];
 
   setMinPrice(minValidatorValue);
-  validatePrice();
+  if (!noValidate) {
+    validatePrice();
+  }
 };
 
 const onCheckInNodeChange = () => {
@@ -155,7 +138,10 @@ const showMessagePopover = (templateId) => {
 const addressNode = formNode.querySelector('#address');
 const resetForm = () => {
   formNode.reset();
+  filterNode.reset();
+  onHouseTypeSelectNodeChange(true);
   resetMap();
+  clearImages();
   addressNode.value = `${MAP_CENTER.lat}, ${MAP_CENTER.lng}`;
 };
 
@@ -165,4 +151,4 @@ resetButtonNode.addEventListener('click', (evt) => {
   resetForm();
 });
 
-export {disablePage, activePage, formNode, showMessagePopover, resetForm};
+export {disablePage, activateFilterForm, activateMainForm, formNode, showMessagePopover, resetForm};

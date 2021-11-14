@@ -1,20 +1,24 @@
-import {addPinsToMap, setFilterForm} from './map.js';
-import { getData } from './api.js';
-import { setUserFormSubmit } from './api.js';
-import { formNode, resetForm, showMessagePopover} from './form.js';
+import {addPinsToMap, loadMap, setFilterForm} from './map.js';
+import { getData, setUserFormSubmit } from './api.js';
+import {activateFilterForm, formNode, resetForm, showMessagePopover} from './form.js';
 import { showAlert } from './utils.js';
 
 const onFormSubmitSuccess = () => {
   showMessagePopover('success');
   resetForm();
+  getData(addPinsToMap, showAlert);
 };
 
 const onFormSubmitError = () => {
   showMessagePopover('error');
 };
 
-getData((offerList) => {
-  addPinsToMap(offerList);
-  setFilterForm(offerList);
-}, showAlert);
+
 setUserFormSubmit(formNode, onFormSubmitSuccess, onFormSubmitError);
+loadMap(() => {
+  getData((offerList) => {
+    addPinsToMap(offerList);
+    setFilterForm(offerList);
+    activateFilterForm();
+  }, showAlert);
+});

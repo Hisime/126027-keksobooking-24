@@ -10,13 +10,23 @@ const advertTemplate = document.querySelector('#card').content.querySelector('.p
 const advertImgElement = document.querySelector('#card').content.querySelector('.popup__photo');
 
 const generateImgs = (array = []) => {
-  const newImgs = [];
+  const newImages = [];
   array.forEach((item) => {
     const imgTemplate = advertImgElement.cloneNode(true);
     imgTemplate.src = item;
-    newImgs.push(imgTemplate);
+    newImages.push(imgTemplate);
   });
-  return newImgs;
+  return newImages;
+};
+
+const fillTextNode = (node, fieldList, optionalString, nodeAttribute = 'textContent') => {
+  const isHaveAllFields = fieldList.every((field) => field);
+  if (isHaveAllFields) {
+    node[nodeAttribute] = optionalString || fieldList[0];
+  }
+  else {
+    node.remove();
+  }
 };
 
 const generateAdvert = (advert) => {
@@ -45,43 +55,14 @@ const generateAdvert = (advert) => {
   const photosNode = advertCard.querySelector('.popup__photos');
   const photoElement = photosNode.querySelector('.popup__photo');
   const photosArray = generateImgs(advert.offer.photos);
-  if (title) {
-    titleNode.textContent = title;
-  }
-  else {
-    titleNode.remove();
-  }
-  if (address) {
-    addressNode.textContent = address;
-  }
-  else {
-    addressNode.remove();
-  }
-  if (price) {
-    priceNode.textContent = `${price} ₽/ночь`;
-  }
-  else {
-    priceNode.remove();
-  }
-  if (type) {
-    typeNode.textContent = type;
-  }
-  else {
-    typeNode.remove();
-  }
-  if (rooms && guests) {
-    capacityNode.textContent = `${rooms} комнаты для ${guests} гостей`;
-  }
-  else {
-    capacityNode.remove();
-  }
-  if (checkin && checkout) {
-    timeNode.textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
-  }
-  else {
-    timeNode.remove();
-  }
-
+  fillTextNode(titleNode, [title]);
+  fillTextNode(addressNode, [address]);
+  fillTextNode(typeNode, [type]);
+  fillTextNode(priceNode, [price], `${price} ₽/ночь`);
+  fillTextNode(capacityNode, [rooms, guests], `${rooms} комнаты для ${guests} гостей`);
+  fillTextNode(timeNode, [checkin, checkout], `Заезд после ${checkin}, выезд до ${checkout}`);
+  fillTextNode(descriptionNode, [description]);
+  fillTextNode(avatarNode, [avatar], null, 'src');
   if (features) {
     featureListNode.forEach((featureListItem) => {
       const isNecessary = features.some(
@@ -95,25 +76,12 @@ const generateAdvert = (advert) => {
   else {
     featuresNode.remove();
   }
-
-  if (description) {
-    descriptionNode.textContent = description;
-  }
-  else {
-    descriptionNode.remove();
-  }
   photoElement.remove();
   if (photosArray.length) {
     photosNode.append(...photosArray);
   }
   else {
     photosNode.remove();
-  }
-  if (avatar) {
-    avatarNode.src = avatar;
-  }
-  else {
-    avatarNode.remove();
   }
   return advertCard;
 };

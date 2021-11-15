@@ -143,6 +143,7 @@ const resetForm = () => {
   resetMap();
   clearImages();
   addressNode.value = `${MAP_CENTER.lat}, ${MAP_CENTER.lng}`;
+  filterNode.dispatchEvent(new Event('change'));
 };
 
 const resetButtonNode = formNode.querySelector('.ad-form__reset');

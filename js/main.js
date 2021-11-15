@@ -6,7 +6,6 @@ import { showAlert } from './utils.js';
 const onFormSubmitSuccess = () => {
   showMessagePopover('success');
   resetForm();
-  getData(addPinsToMap, showAlert);
 };
 
 const onFormSubmitError = () => {

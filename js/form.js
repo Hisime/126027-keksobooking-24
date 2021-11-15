@@ -140,6 +140,7 @@ const resetForm = () => {
   formNode.reset();
   filterNode.reset();
   onHouseTypeSelectNodeChange(true);
+  onRoomSelectNodeChange();
   resetMap();
   clearImages();
   addressNode.value = `${MAP_CENTER.lat}, ${MAP_CENTER.lng}`;
